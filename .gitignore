@@ -2,6 +2,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,python,macos
 
 *.pem 
+*.zip
+__*
 
 ### macOS ###
 # General
