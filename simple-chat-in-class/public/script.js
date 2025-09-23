@@ -1,3 +1,5 @@
+const socket = io();
+
 let formeElm = document.querySelector("#chatForm");
 console.log(formeElm);
 let msgInput = document.querySelector("#newMessage");
@@ -20,6 +22,7 @@ function newMessagesSubmitted(event){
     // actuaally we need to
     // send the new message to 
     // the server first:
+    socket.emit("message", newMsg );
 
 
     // clear out input:
