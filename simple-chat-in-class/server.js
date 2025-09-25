@@ -5,7 +5,7 @@ const https = require("https");
 const fs = require("fs");
 
 const app = express(); // the server "app", the server behaviour
-const portHTTPS = 3001; // port for https
+const portHTTPS = 4200; // port for https
 
 // returning to the client anything that is
 // inside the public folder
@@ -32,13 +32,13 @@ io.on('connection', (socket) => {
 
     socket.on("message", function(incomingMessage){
         console.log("got a msg", incomingMessage)
+
+       
     })
 
     socket.on("disconnect", function(){
         console.log("someone disconnected", socket.id)
     })
-
-
 
 })
 

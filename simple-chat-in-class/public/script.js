@@ -31,6 +31,10 @@ function newMessagesSubmitted(event){
 }
 
 
+socket.on("message-from-server", function(data){
+    // waht do to with the messaeg from server
+})
+
 
 // LISTEN FOR NEW MESSAGES FROM SERVER
 // APPEND THEM TO THE MESSAGE BOX
