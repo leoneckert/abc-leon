@@ -1,7 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node,python,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,python,macos
 
-*.pem 
+# *.pem 
 *.zip
 __*
 
