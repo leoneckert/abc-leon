@@ -4,6 +4,7 @@
 const CUT = 1;  // 1 = go up one folder; 2 = two folders; etc.
 const prefix = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean).slice(0, -CUT).join('/');
 // let socket;
+console.log(prefix);
 const socket = io({ path: prefix + '/socket.io' });
 
 // let readyButton = document.querySelector("#ready");
