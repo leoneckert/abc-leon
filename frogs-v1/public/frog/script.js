@@ -6,6 +6,16 @@ const prefix = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean).s
 let socket;
 // const socket = io({ path: prefix + '/socket.io' });
 
+const CUT = 1;
+const parts = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean);
+const base  = parts.length ? '/' + parts.slice(0, -CUT).join('/') : '';
+console.log(base);
+let socket;
+// const socket = io({ path: base + '/socket.io' });  // yields '/leon/port-4100/socket.io' or '/socket.io'
+
+
+
+
 let readyButton = document.querySelector("#ready");
 let mainWrapper = document.querySelector(".main-wrapper")
 let w = window.innerWidth;
@@ -18,7 +28,8 @@ readyButton.addEventListener("click", function(){
     readyButton.remove();
 
     // connect to socket server
-    socket = io({ path: prefix + '/socket.io' });
+    // socket = io({ path: prefix + '/socket.io' });
+    socket = io({ path: base + '/socket.io' });  // yields '/leon/port-4100/socket.io' or '/socket.io'
     socket.emit("my-role", {role: "frog", frogIdx: frogIdx});
 
     socket.on("make-sound", function(){
