@@ -1,11 +1,20 @@
 // socket connection that works locally and on server
 // const socket = io();
 // const prefix = location.pathname.replace(/\/$/, '');      // '' or '/name/port-4200'
-const CUT = 1;  // 1 = go up one folder; 2 = two folders; etc.
-const prefix = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean).slice(0, -CUT).join('/');
-// let socket;
-console.log(prefix);
-const socket = io({ path: prefix + '/socket.io' });
+
+// const CUT = 1;  // 1 = go up one folder; 2 = two folders; etc.
+// const prefix = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean).slice(0, -CUT).join('/');
+// // let socket;
+// console.log(prefix);
+// const socket = io({ path: prefix + '/socket.io' });
+
+
+const CUT = 1;
+const parts = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean);
+const base  = parts.length ? '/' + parts.slice(0, -CUT).join('/') : '';
+console.log(base);
+const socket = io({ path: base + '/socket.io' });  // yields '/leon/port-4100/socket.io' or '/socket.io'
+
 
 // let readyButton = document.querySelector("#ready");
 let mainWrapper = document.querySelector(".main-wrapper")
