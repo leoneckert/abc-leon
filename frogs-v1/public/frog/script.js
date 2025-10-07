@@ -1,9 +1,9 @@
 // socket connection that works locally and on server
 // const socket = io();
 // const prefix = location.pathname.replace(/\/$/, '');      // '' or '/name/port-4200'
-const CUT = 1;  // 1 = go up one folder; 2 = two folders; etc.
-const prefix = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean).slice(0, -CUT).join('/');
-let socket;
+// const CUT = 1;  // 1 = go up one folder; 2 = two folders; etc.
+// const prefix = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean).slice(0, -CUT).join('/');
+// let socket;
 // const socket = io({ path: prefix + '/socket.io' });
 
 const CUT = 1;
