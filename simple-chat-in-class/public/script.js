@@ -1,4 +1,7 @@
-const socket = io();
+// socket connection that works locally and on server
+// const socket = io();
+const prefix = location.pathname.replace(/\/$/, '');      // '' or '/name/port-4200'
+const socket = io({ path: prefix + '/socket.io' });
 
 let formeElm = document.querySelector("#chatForm");
 console.log(formeElm);
