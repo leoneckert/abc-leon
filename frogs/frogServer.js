@@ -47,10 +47,10 @@ io.on('connection', (socket) => {
             frogs.push({id: socket.id, frogIdx: data.frogIdx});
             console.log(frogs);
            
-
-            // if(conductor){
-            //     io.to(conductor).emit('new-frog', frogData);
-            // }
+            if(conductor){
+                // socket.emit("new-frog....")
+                io.to(conductor).emit('new-frog', frogData);
+            }
 
         }else if(data.role = "conductor"){
             conductor = socket.id;
@@ -74,6 +74,8 @@ io.on('connection', (socket) => {
         console.log("someone disconnected", socket.id)
         console.log(frogs);
 
+        // delete frog from the global array
+        // that keeps track of all frogs online
         let idx = frogs.findIndex(function(f){
             return f.id == socket.id
         });
@@ -81,6 +83,8 @@ io.on('connection', (socket) => {
             frogs.splice(idx, 1);
             console.log(frogs);
         }else if(conductor == socket.id){
+            // if conductor disconnects set, conductor socketID variable
+            // back to undefined.
             conductor = undefined;
         }
 

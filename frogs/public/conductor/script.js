@@ -25,6 +25,18 @@ socket.on("all-frogs", function(data){
     
 })
 
+socket.on("new-frog", function(frog){
+    console.log(frog);
+    addFrog(frog.id, frog.frogIdx )
+})
+
+socket.on('delete-frog', function(data){
+    // delete the frog from the page
+    // ..
+    console.log(data);
+    document.querySelector("#A"+data).remove();
+})
+
 
 
 // addFrog("sdfobjweq", 0); // function test
@@ -45,6 +57,7 @@ function addFrog(socketID, frogIdx){
         setTimeout(function(){
             document.querySelector("#A"+socketID).style.opacity = 1;
         }, 500)
+        socket.emit("trigger-frog", socketID)
 
     })
 }
