@@ -9,7 +9,7 @@ let others = [];
 let socket;
 // let socket = io();  // yields '/leon/port-4100/socket.io' or '/socket.io'
 if(location.hostname.toLowerCase().startsWith('browsercircus')){
-  socket = io("/gps-see-everyone/socket.io");  // yields '/leon/port-4100/socket.io' or '/socket.io'
+  socket = io({path: "/gps-see-everyone/socket.io"});  // yields '/leon/port-4100/socket.io' or '/socket.io'
 }else{
   socket = io(); 
 }
