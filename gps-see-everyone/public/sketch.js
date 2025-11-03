@@ -34,10 +34,11 @@ function setup() {
   canvas.parent("p5-canvas-container");
   me = new Person("ME");
   // someone = new Person();
-  let g = new Person("someone");
-  g.lat = 31.217739076607155;
-  g.lon = 121.4242046585646;
-  others.push(g)
+  
+  // let g = new Person("someone");
+  // g.lat = 31.217739076607155;
+  // g.lon = 121.4242046585646;
+  // others.push(g)
 }
 
 function draw() {

@@ -29,14 +29,14 @@ let currentlyConntected = []; //list of socket IDs of copnnected clients
 io.on('connection', (socket) => {
 
     // we manage the connection inside here
-    console.log('a user connected', socket.id);
+    // console.log('a user connected', socket.id);
     // keep track of all clients connected
     currentlyConntected.push(socket.id);
     console.log(currentlyConntected);
     
 
     socket.on("locationFromClient", function(data){
-        console.log("got new location", data);
+        // console.log("got new location", data);
         // share the location with everybody except
         // the sender
         let locationInfo = {
