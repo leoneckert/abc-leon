@@ -5,17 +5,17 @@ let currentLongitude = 0; // global variables will be updated as we get GPS data
 let currentLatitude = 0; // global variables will be updated as we get GPS data
 let mapInit = false; // we only do map stuff once mapInit is true (see in draw)
 let me; // point object showing our own location
-let others = [];
+let things = [];
 let socket;
 // let socket = io();  // yields '/leon/port-4100/socket.io' or '/socket.io'
 if(location.hostname.toLowerCase().startsWith('browsercircus')){
-  socket = io({path: "/gps-see-everyone/socket.io"});  // yields '/leon/port-4100/socket.io' or '/socket.io'
+  socket = io({path: "/gps-drop/socket.io"});  // yields '/leon/port-4100/socket.io' or '/socket.io'
 }else{
   socket = io(); 
 }
 
-
-
+let myHue = Math.random()*360;
+let closerThan10 = false;
 
 // options for map
 // we only actually initialize the map once we get data where we are (in draw)
@@ -25,8 +25,8 @@ let mappa_options = {
   lng: 0, // will change once we have data
   zoom: 16, // initial zoom level
   // style: "https://b.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png", 
-  style: "https://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}",
-  // style: 'https://webst01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=6&x={x}&y={y}&z={z}',
+  // style: "https://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}",
+  style: 'https://webst01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=6&x={x}&y={y}&z={z}',
 }
 
 function setup() {
@@ -35,10 +35,11 @@ function setup() {
   me = new Person("ME");
   // someone = new Person();
   
-  // let g = new Person("someone");
+  
   // g.lat = 31.217739076607155;
   // g.lon = 121.4242046585646;
-  // others.push(g)
+  
+  colorMode(HSB);
 }
 
 function draw() {
@@ -56,19 +57,35 @@ function draw() {
     mapInit = true
   }
   noStroke();
-  fill(0, 160)
+  fill(0, 0, 0, 0.5)
   rect(0, 0, width, height);
   if (mapInit) {
     // only update and draw our point if we actually have data
     me.update();
     me.display();
-    // console.log(me)
-    for(o of others){
-      o.update();
-      o.display();
+    
+    
+    // // console.log(me)
+    for(t of things){
+      t.update();
+      t.display();
     }
-    drawPointers(others);
-    drawPointers([me]);
+    // drawPointers(others);
+    // drawPointers([me]);
+
+
+  }
+
+  let filteredThings = things.filter(t=>t.id == socket.id);
+
+  closerThan10 = false;
+  for(t of filteredThings){
+    let d = distMeters(me.lat, me.lon, t.lat, t.lon);
+    console.log(d, "meters");
+    if(d < 10){
+      closerThan10 = true;
+    }
+
   }
 
 
@@ -78,10 +95,24 @@ function draw() {
 // P5 touch events: https://p5js.org/reference/#Touch
 function touchStarted() {
   if (mapInit) {
-    let pos = myMap.pixelToLatLng(touches[0].x, touches[0].y);
-    console.log("TOUCHED", pos);
+
+
+    // let pos = myMap.pixelToLatLng(touches[0].x, touches[0].y);
+    // console.log("TOUCHED", pos);
+    
+    
+    if(touches.length>2){
+      let t = new Thing(myHue, 31.217739076607155,121.4242046585646, socket.id);
+      things.push(t)
+    }else if(touches.length>1 && closerThan10 == false){
+      socket.emit("drop-thing", {
+        lat: me.lat,
+        lon: me.lon,
+        hue: myHue
+      })
+    }
   } else {
-    console.log("TOUCHED", touches);
+    // console.log("TOUCHED", touches);
   }
 }
 
@@ -163,7 +194,7 @@ function handleNewPosition(pos) {
     lon: currentLongitude
   }
   // console.log("me", socket.id);
-  socket.emit("locationFromClient", locForServer);
+  // socket.emit("locationFromClient", locForServer);
 
   if (mapInit) {
     // if map already displayed, update the point
@@ -189,41 +220,54 @@ socket.on("locationFromServer", function(data){
   // console.log("data from someone", data);
 
  
-  let idx = others.findIndex(o => o.id === data.socketID);
-  // console.log(others, data.socketID, idx)
-  if(idx > -1){
-    // console.log("already known")
-    others[idx].lat = data.lat;
-    others[idx].lon = data.lon;
-    others[idx].recalculatePosition();
-  }else{
-    // console.log("new person")
-    let o = new Person(data.socketID);
-    o.lat = data.lat;
-    o.lon = data.lon;
-    o.recalculatePosition();
-    others.push(o);
-  }
+  // let idx = others.findIndex(o => o.id === data.socketID);
+  // // console.log(others, data.socketID, idx)
+  // if(idx > -1){
+  //   // console.log("already known")
+  //   others[idx].lat = data.lat;
+  //   others[idx].lon = data.lon;
+  //   others[idx].recalculatePosition();
+  // }else{
+  //   // console.log("new person")
+  //   let o = new Person(data.socketID);
+  //   o.lat = data.lat;
+  //   o.lon = data.lon;
+  //   o.recalculatePosition();
+  //   others.push(o);
+  // }
 
 
 })
 
-socket.on("deletePerson", function(data){
-  let idx = others.findIndex(o => o.id === data.socketID);
-  if(idx > -1){
-    others.splice(idx, 1);
+socket.on("new-thing", function(thing){
+          console.log("new thing", thing)
+
+  things.push(new Thing(thing.hue, thing.lat, thing.lon, thing.socketID))
+  console.log(things)
+})
+
+socket.on("all-things", function(theThings){
+  for(t of theThings){
+    things.push(new Thing(t.hue, t.lat, t.lon, t.socketID));
   }
 })
+
+// socket.on("deletePerson", function(data){
+//   let idx = others.findIndex(o => o.id === data.socketID);
+//   if(idx > -1){
+//     others.splice(idx, 1);
+//   }
+// })
 
 function updateMapContent() {
   // let myPosOnCanvas = myMap.latLngToPixel(currentLatitude, currentLongitude)
   // me.goalX = myPosOnCanvas.x;
   // me.goalY = myPosOnCanvas.y;
   me.recalculatePosition();
-  for(o of others){
+  for(t of things){
     // let pos = myMap.latLngToPixel(currentLatitude, currentLongitude)
     // o.update();
-    o.recalculatePosition();
+    t.recalculatePosition();
   }
 
 }
@@ -269,3 +313,57 @@ class Person {
     pop();
   }
 }
+
+
+class Thing {
+  constructor(hue, lat, lon, id) {
+    this.x = 0;
+    this.y = 0;
+    this.goalX = 0;
+    this.goalY = 0;
+    this.lat = lat;
+    this.lon = lon;
+    this.recalculatePosition()
+    this.size = 14;
+    this.col = color(255, 255, 255);
+    this.hue = hue;
+    this.id = id;
+
+  }
+  recalculatePosition(){
+    if(mapInit){
+      let pos = myMap.latLngToPixel(this.lat, this.lon);
+      this.goalX = pos.x;
+      this.goalY = pos.y;
+    }
+  }
+  update() {
+    // lerp to each new location to keep things smoother
+    this.x = lerp(this.x, this.goalX, 0.2)
+    this.y = lerp(this.y, this.goalY, 0.2)
+
+  }
+  display() {
+    push();
+    translate(this.x, this.y);
+    fill(this.hue, 255, 255);
+    stroke("black");
+    strokeWeight(1)
+    let dia = this.size + sin(frameCount * 0.1)
+    circle(0, 0, dia);
+    noStroke();
+    fill(0);
+    text(this.id, 0, 0);
+
+    pop();
+  }
+}
+
+
+const distMeters = (lat1, lon1, lat2, lon2) => {
+  const R=6371000, toRad=x=>x*Math.PI/180;
+  const dφ=toRad(lat2-lat1), dλ=toRad(lon2-lon1);
+  const φ1=toRad(lat1), φ2=toRad(lat2);
+  const a=Math.sin(dφ/2)**2 + Math.cos(φ1)*Math.cos(φ2)*Math.sin(dλ/2)**2;
+  return 2*R*Math.asin(Math.sqrt(a));
+};
