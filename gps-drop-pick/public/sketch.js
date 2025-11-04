@@ -101,10 +101,7 @@ function touchStarted() {
     // console.log("TOUCHED", pos);
     
     
-    if(touches.length>2){
-      let t = new Thing(myHue, 31.217739076607155,121.4242046585646, socket.id);
-      things.push(t)
-    }else if(touches.length>1 && closerThan10 == false){
+    if(touches.length>2 && closerThan10 == false){
       socket.emit("drop-thing", {
         lat: me.lat,
         lon: me.lon,
