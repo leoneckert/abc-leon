@@ -27,7 +27,7 @@ if(myUsername){
 
 // start socket
 if(location.hostname.toLowerCase().startsWith('browsercircus') || location.hostname.toLowerCase().startsWith('www')){
-  socket = io({path: "/YOURPATH-and-PORT/socket.io"});  // yields '/leon/port-4100/socket.io' or '/socket.io'
+  socket = io({path: "/persistent-chat/socket.io"});  // yields '/leon/port-4100/socket.io' or '/socket.io'
 }else{
   socket = io(); 
 }
