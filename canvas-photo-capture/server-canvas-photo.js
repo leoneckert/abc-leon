@@ -28,7 +28,7 @@ app.post('/upload-photo', (req, res) => {
   req.pipe(writeStream);
 
   req.on('end', () => {
-    res.json({ url: '/uploads/' + filename });
+    res.json({ url: 'uploads/' + filename });
 
   });
 });
