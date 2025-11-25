@@ -18,7 +18,7 @@ const portHTTPS = 3013; // port for https
 // inside the public folder
 app.use(express.static('public'));
 
-app.post('upload-photo', (req, res) => {
+app.post('/upload-photo', (req, res) => {
   console.log("someone upload photo")
   const filename = Date.now() + '.png';     // simple readable filename
   const filepath = 'public/uploads/' + filename;
