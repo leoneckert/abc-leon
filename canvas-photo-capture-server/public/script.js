@@ -62,7 +62,6 @@ sendButton.addEventListener("click", function(){
 })
 
 function sendImageToServer(blob){
-    console.log(blob)
     fetch('upload-photo', {
         method: 'POST',
         headers: { 'Content-Type': 'image/png' }, // or jpg
@@ -82,5 +81,6 @@ function sendImageToServer(blob){
         images.prepend(img);
         album.style.display = "block";
         resetCamera();
-    }); 
+    });
+    
 }

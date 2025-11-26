@@ -8,6 +8,10 @@ const app = express(); // the server "app", the server behaviour
 const portHTTPS = 3013; // port for https
 
 
+// const multer = require('multer');
+
+// // save uploads in ./uploads/ folder
+// const upload = multer({ dest: 'uploads/' });
 
 
 // returning to the client anything that is
@@ -20,10 +24,12 @@ app.post('/upload-photo', (req, res) => {
   const filepath = 'public/uploads/' + filename;
 
   const writeStream = fs.createWriteStream(filepath);
+
   req.pipe(writeStream);
 
   req.on('end', () => {
     res.json({ url: 'uploads/' + filename });
+
   });
 });
 
