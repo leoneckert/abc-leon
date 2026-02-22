@@ -1,10 +1,10 @@
-const CUT = 1;
-const parts = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean);
-// const base  = parts.length ? '/' + parts.slice(0, -CUT).join('/') : ''; // on SERVER...
-const base  = parts.length ? parts.slice(0, -CUT).join('/') : '';
-console.log(base);
-const socket = io({ path: base + '/socket.io' });  // yields '/leon/port-4100/socket.io' or '/socket.io'
 
+let socket;
+if(location.hostname.toLowerCase().startsWith('browsercircus') || location.hostname.toLowerCase().startsWith('www')){
+  socket = io({path: "/leon/port-4101/socket.io"});  // e.g. '/leon/port-4100/socket.io' or '/socket.io'
+}else{
+  socket = io(); 
+}
 
 // let readyButton = document.querySelector("#ready");
 let mainWrapper = document.querySelector(".main-wrapper")
