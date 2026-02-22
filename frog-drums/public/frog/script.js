@@ -90,7 +90,7 @@ window.addEventListener("load", function(){
     imgElm.height = frogSize;
 
     imgElm.addEventListener("click", function(){
-        audioElm.play();
+        // audioElm.play();
     })
 
     audioElm.addEventListener("timeupdate", function(){
