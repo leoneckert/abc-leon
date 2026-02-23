@@ -19,7 +19,7 @@ readyButton.addEventListener("click", function(){
     readyButton.remove();
 
     // connect to socket server
-    socket = io({ path: base + '/socket.io' });  
+    // socket = io({ path: base + '/socket.io' });  
 
     
     // socket communication
