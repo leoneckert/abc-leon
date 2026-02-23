@@ -34,7 +34,11 @@ socket.on('delete-frog', function(data){
     // delete the frog from the page
     // ..
     console.log(data);
-    document.querySelector("#A"+data).remove();
+    let elm = document.querySelector("#A"+data);
+    if(elm){
+        elm.remove();
+    }
+    
 })
 
 
