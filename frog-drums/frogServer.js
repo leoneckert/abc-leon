@@ -50,6 +50,7 @@ io.on('connection', (socket) => {
            
             if(conductor){
                 // socket.emit("new-frog....")
+                console.log("conductor connected")
                 io.to(conductor).emit('new-frog', frogData);
             }
 
