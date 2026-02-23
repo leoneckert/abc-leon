@@ -50,11 +50,12 @@ io.on('connection', (socket) => {
            
             if(conductor){
                 // socket.emit("new-frog....")
-                console.log("conductor connected")
+                
                 io.to(conductor).emit('new-frog', frogData);
             }
 
         }else if(data.role = "conductor"){
+            console.log("conductor connected")
             conductor = socket.id;
             // send all existing frogs to conductor:
             socket.emit("all-frogs", frogs);
