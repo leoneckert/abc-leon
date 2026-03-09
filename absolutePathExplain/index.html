@@ -14,6 +14,19 @@
     <p>link to <a href="/secondPage.html">/secondPage.html</a></p>
     <br>
     <hr>
+    <h3>😭 the problem 🫨</h3>
+        <p>the second link we clicked was <i>absolute</i> and took us out of the current project folder to the very <b>root</b> of our web server:</p>
+    
+    <pre>
+        <code>
+    ...github.io/secondPage.html 
+        </code>
+    </pre>
+        <p>but this page doesn't even exist</p>
+
+    <br>
+    <hr>
+    <h3>📝 why this matters for us 🤓</h3>
     <p>your website will be hosted on <i>https://browsercircus.com/your-name/your-port</i></p>
     <p>
         in your <code>&lt;head&gt;&lt;/head&gt;</code>, your socket.io library might be included like this:
@@ -26,7 +39,7 @@
     </pre>
     
     <p>
-        once your website is on the server, this will try to get the library from:
+        once your website is on the server, it will try to get the library from:
     </p>
 
     <pre>
@@ -35,7 +48,21 @@
         </code>
     </pre>
 
+    <p>however, your server file serves the library on:</p>
+    <pre>
+        <code>
+    https://browsercircus.com/<b>your-name/your-port/</b>socket.io/socket.io.js     
+        </code>
+    </pre>
 
+    <h3>🌟 the solution / don't forget to do this: 🌟 </h3>
+    <p>to make sure the library is loaded, remove the <b>/</b> before <i>socket.io/...</i></p>
+    <p>like so:</p>
+    <pre>
+        <code>
+    &lt;script src=&quot;socket.io/socket.io.js&quot;&gt;&lt;/script&gt;
+        </code>
+    </pre>
 
 </body>
 
