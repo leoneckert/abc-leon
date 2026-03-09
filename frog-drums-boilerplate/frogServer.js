@@ -39,52 +39,20 @@ io.on('connection', (socket) => {
     // LISTEN TO
     // client self-reporting role:
     socket.on("my-role", function(data){
-        console.log("the data", data);
         // if frog:
-        if(data.role == "frog"){
-            //     add object with socket id to frog array
-            let frogData = {
-                id: socket.id,
-                frogIdx: data.frogIdx,
-                // drumming: false
-            }
-            frogs.push(frogData);
-            console.log(frogs);
-            //     inform conductor of new frog
-            if(conductor != undefined){
-                // socket.emit("new-frog", frogData);
-                io.to(conductor).emit("new-frog", frogData);
-            }
-            // 
-
-        }else if(data.role == "conductor"){
+        //     add object with socket id to frog array
+        //     inform conductor of new frog
         // if conductor:
         //     store conductor socket id to conductor global variable
-        //     tell conductor about all frogs that are online already
-            conductor = socket.id;
-            socket.emit("frogs-already-online", frogs);
-
-        }
-        
     })
 
     // always comes from conductor
     // listen to frogs being triggered
-    socket.on("trigger-frog", function(frogId){
-     
+
         // check if frog exists
-
-        // option A: tell that frog to make sounds
-        io.to(frogId).emit("make-sound");
-
-
+        // option A: tell taht frog to make sounds
         // option B: chck if the frog currently makes sounds
         //      either tell them to start or stop
-
-
-
-    })
-
 
 
 
@@ -95,37 +63,24 @@ io.on('connection', (socket) => {
     // manage the roles
     socket.on("disconnect", function(){
         console.log("someone disconnected", socket.id)
-        // console.log(frogs);
+        console.log(frogs);
 
-       
-        // check if its a frog
-
-        // find index in frog array
+        // delete frog from the global array
+        // that keeps track of all frogs online
+        
+        // find index
         let idx = frogs.findIndex(function(f){
             return f.id == socket.id
         });
-        console.log("idx", idx)
 
         // if its a frog
-        if(idx > -1){
             // delete frog
-            frogs.splice(idx, 1);
-        }
-        console.log(frogs)
-
         // if it's a cnductpr
             // delete conductor
-        if(socket.id == conductor){
-            conductor = undefined;
-        }
+
 
         // if the condiuctr is still online
         // tell them which frg has been deleted
-        if(conductor != undefined){
-            io.to(conductor).emit("delete-frog", socket.id)
-        }
-
-
 
     })
 

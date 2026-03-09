@@ -14,37 +14,18 @@ let frogs = []
 // socket communication
 
 // inform server of my role
-socket.emit("my-role", {role: "conductor"})
 
 
 // handle EXISTING "all frogs"
-socket.on("frogs-already-online", function(data){
-    console.log("already online:", data);
 
-    // loop over exitsing frogs, put them onto the page! ---------------  WEDNESDAY STARTS RIGHT HERE!
-    for(let i = 0; i < data.length; i++){
-        let frog = data[i];
-        addFrog(frog.id, frog.frogIdx);
-    }
-})
 
 // handle new frog
-socket.on("new-frog", function(frog){
-    addFrog(frog.id, frog.frogIdx);
-})
+
 
 // handle deleting frogs
-socket.on("delete-frog", function(frogId){
-    console.log(frogId, "disconnects");
-    // find div with the frogId as its id. 
-    // deelete that div
-    let frogDiv = document.querySelector("#A"+frogId); //find div with the socketid of the frog who disconnected
-    if(frogDiv){
-        frogDiv.remove();  // delete that div
-    } 
-})
 
-// addFrog("sdfobjweq", 3); // function test
+
+// addFrog("sdfobjweq", 0); // function test
 
 function addFrog(socketID, frogIdx){
     let imgWrapper = document.createElement("div");
@@ -66,10 +47,8 @@ function addFrog(socketID, frogIdx){
             document.querySelector("#A"+socketID).style.opacity = 0.3;
         }
 
-        console.log("clicked", socketID);
 
-        // tell server we pressed the frog
-        socket.emit("trigger-frog", socketID);
+        // tell server we pressed the frig
 
     })
 }
