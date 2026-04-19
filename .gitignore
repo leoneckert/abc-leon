@@ -4,6 +4,7 @@
 # *.pem 
 *.zip
 __*
+*/uploads/*
 
 ### macOS ###
 # General
