@@ -61,6 +61,8 @@ captureButton.addEventListener("click", function () {
         sendButton.style.visibility = "visible";
         captureButton.innerText = "Try Again";
         captureButton.style.width = "30%";
+        captureButton.style.backgroundColor = "rgb(255, 191, 191)";
+
         camSound.play();
     } else {                  // CLICK OF "Try Again" BUTTON
         resetCamera();
@@ -97,6 +99,7 @@ function resetCamera() {
     sendButton.style.visibility = "hidden";
     captureButton.innerText = "SNAP!";
     captureButton.style.width = "50%";
+    captureButton.style.backgroundColor = "initial";
 }
 
 
