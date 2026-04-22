@@ -32,12 +32,14 @@ body{
 button{
     width: 50%;
     height: 35px;
+    border-radius: 20px;
  
 }
 
 
 #sendButton{
     visibility: hidden;
+    background-color: aquamarine;
 }
 #album{
     height: 50vh;

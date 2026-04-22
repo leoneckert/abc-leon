@@ -5,7 +5,7 @@ const https = require("https");
 const fs = require("fs");
 
 const app = express(); // the server "app", the server behaviour!
-const portHTTPS = 3013; // port for https
+const portHTTPS = 3014; // port for https
 
 // Creating object of key and certificate
 // for SSL
@@ -22,8 +22,8 @@ const io = new Server(HTTPSserver); // start socket io
 
 
 let photos = [];
-let dataText = fs.readFileSync("photos.json", "utf8");
-photos = JSON.parse(dataText);
+// let dataText = fs.readFileSync("photos.json", "utf8");
+// photos = JSON.parse(dataText);
 
 
 // HTTPS ROUTES:
@@ -38,24 +38,25 @@ app.use(express.static('public'));
 
 app.post('/upload-photo', (req, res) => {
   console.log("someone upload photo")
+ 
+  // SAVE PHOTO TO SERVER 
   const filename = crypto.randomUUID() + '.png';  // filename with timestamp
   const filepath = 'public/uploads/' + filename;
   const writeStream = fs.createWriteStream(filepath);
   req.pipe(writeStream);
 
+  // 
   req.on('end', () => {
     // res.json({ url: 'uploads/' + filename });
     res.sendStatus(200);
-    // save path to json file
-    // let online users know
-    let imageURL = 'uploads/' + filename
-    photos.push({
-        ts: Date.now(), 
-        url: imageURL
-    })
-    let dataAsText = JSON.stringify(photos, null, 2);
-    fs.writeFileSync("photos.json", dataAsText, 'utf8')
-    io.emit("new-photo", { url: imageURL })
+    
+    let imageURL = 'uploads/' + filename;
+    console.log("imageURL", imageURL)
+
+    // save image path to photos array // <-------  !!!!
+    // save photos array to JSON file // <-------  !!!!
+    // let online users know about the new path
+    io.emit("new-photo", imageURL);
   });
 });
 
@@ -65,7 +66,9 @@ io.on('connection', (socket) => {
 
     // we manage the connection inside here
     console.log('a user connected', socket.id);
-    socket.emit("historic-photos", photos);
+
+    // send historic photos to new connection // <------- !!!!
+  
  
     socket.on("disconnect", function(){
         console.log("someone disconnected", socket.id)

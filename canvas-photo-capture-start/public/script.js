@@ -1,6 +1,6 @@
 let socket;
 if (location.hostname.toLowerCase().startsWith('browsercircus') || location.hostname.toLowerCase().startsWith('www')) {
-    socket = io({ path: "/YOURPATH-and-PORT/socket.io" });  // yields '/leon/port-4100/socket.io' or '/socket.io'
+    socket = io({ path: "/canvas-photo/socket.io" });  // yields '/leon/port-4100/socket.io' or '/socket.io'
 } else {
     socket = io();
 }
@@ -61,6 +61,8 @@ captureButton.addEventListener("click", function () {
         sendButton.style.visibility = "visible";
         captureButton.innerText = "Try Again";
         captureButton.style.width = "30%";
+        captureButton.style.backgroundColor = "rgb(255, 191, 191)";
+
         camSound.play();
     } else {                  // CLICK OF "Try Again" BUTTON
         resetCamera();
@@ -70,7 +72,8 @@ captureButton.addEventListener("click", function () {
 // pressing the send to server button
 sendButton.addEventListener("click", function () {
     // turn canvas into png image data
-    canvas.elt.toBlob(sendImageToServer, 'image/png')
+    canvas.elt.toBlob(sendImageToServer, 'image/png');
+    
 })
 
 
@@ -78,15 +81,13 @@ sendButton.addEventListener("click", function () {
 
 // array of photos:
 socket.on("historic-photos", function (data) {
-    console.log(data)
-    for (p of data) {
-        prependPhoto(p.url)
-    }
 })
 
 // individual photo:
 socket.on("new-photo", function (data) {
-    prependPhoto(data.url);
+    console.log(data);
+    prependPhoto(data);
+    
 })
 
 
@@ -97,6 +98,7 @@ function resetCamera() {
     sendButton.style.visibility = "hidden";
     captureButton.innerText = "SNAP!";
     captureButton.style.width = "50%";
+    captureButton.style.backgroundColor = "initial";
 }
 
 
